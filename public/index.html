@@ -360,6 +360,15 @@ function setDefaultArtPlacement(promptText=""){
   $("artRotation").value=$("artRotationNum").value=0;
   updateArtStyle();
 }
+function updateArtIntegration(){
+  if(!currentImage || artOverlay.style.display==="none") return;
+  try{
+    const probe=document.createElement("canvas"), pctx=probe.getContext("2d"); probe.width=32; probe.height=32;
+    const baseImg=document.getElementById("result"); if(!baseImg.naturalWidth) return; pctx.drawImage(baseImg,0,0,32,32);
+    const px=pctx.getImageData(0,0,32,32).data; let sum=0; for(let i=0;i<px.length;i+=4) sum+=(.2126*px[i]+.7152*px[i+1]+.0722*px[i+2]);
+    const light=sum/(32*32*255); artOverlay.style.opacity=(.78+Math.min(.12,light*.12)).toFixed(2);
+  }catch(e){ artOverlay.style.opacity=".86"; }
+}
 function updateArtStyle(){
   const size=Number($("artSize").value);
   const x=Number($("artX").value);
@@ -546,7 +555,11 @@ $("downloadComposite").addEventListener("click",async()=>{
       ctx.save();
       ctx.translate(cx,cy);
       ctx.rotate(rot);
+      ctx.globalAlpha=.86;
+      ctx.globalCompositeOperation="multiply";
       ctx.drawImage(art,-drawW/2,-drawH/2,drawW,drawH);
+      ctx.globalCompositeOperation="source-over";
+      ctx.globalAlpha=1;
       ctx.restore();
     }
 
