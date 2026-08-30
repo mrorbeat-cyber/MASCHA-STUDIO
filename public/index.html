@@ -55,7 +55,7 @@ a.download{display:inline-block;margin-top:10px;color:var(--teal2);text-decorati
 <main>
   <div class="top"><div class="brand">MASCHA <b>STUDIO</b></div><div class="pill">POD · AHORRO INTELIGENTE</div></div>
 
-  <div class="workspaceDock" id="workspaceDock"><button class="workspaceTab active" id="mockupModule">MOCKUP DE PRODUCTO</button><button class="workspaceTab" id="backgroundModule">FONDOS / PUBLICIDAD</button><span id="workspaceState">Trabajando en producto + diseño</span></div><div class="layout">
+  <div class="workspaceDock" id="workspaceDock"><span class="workspaceTab active">MOCKUP DE PRODUCTO</span></div><div class="layout">
     <section class="card">
       <h1>¿Qué deseas crear?</h1>
       <div class="muted">Usa aquí el prompt ya refinado en ChatGPT para evitar regeneraciones innecesarias.</div>
@@ -101,7 +101,7 @@ a.download{display:inline-block;margin-top:10px;color:var(--teal2);text-decorati
 
     <section class="card">
       <h1>Resultado visual</h1>
-      <div class="baseTools"><button class="secondary mini" id="openBase">CARGAR FONDO / MOCKUP BASE</button><span class="small">Carga una imagen base sin regenerar ni gastar API.</span></div><div class="productTools"><label class="label">COLOR DEL PRODUCTO</label><input id="productColor" type="color" value="#ffffff"><input id="productFile" type="file" accept="image/*" aria-label="Cargar producto aislado"><span class="small">Para recolorear solo la prenda, carga aquí un PNG/JPG del mug o camiseta aislado.</span><span class="small">Aplica un tono local al producto sin regenerar.</span></div><div class="fusionPanel" id="fusionPanel"><div class="fusionTitle">ÁREAS DE TRABAJO</div><div class="fusionTabs"><button class="secondary mini" id="designArea">DISEÑO</button><button class="secondary mini" id="productArea">PRODUCTO</button><button class="secondary mini" id="backgroundArea">FONDO</button><button class="primary mini" id="fusionArea">FUSIÓN</button></div><div class="small">Edita cada capa por separado y usa FUSIÓN para combinar y descargar las capas visibles.</div></div><div class="preview" id="preview">
+      <div class="baseTools"><button class="secondary mini" id="openBase">CARGAR FONDO / MOCKUP BASE</button><span class="small">Carga una imagen base sin regenerar ni gastar API.</span></div><div class="productTools"><label class="label">CAPA DE COLOR SÓLIDO</label><input id="productColor" type="color" value="#ffffff"><input id="productFile" type="file" accept="image/*" aria-label="Cargar producto aislado"><span class="small">Para recolorear solo la prenda, carga aquí un PNG/JPG del mug o camiseta aislado.</span><span class="small">Cambia el color de la capa seleccionada sin alterar el fondo ni el diseño.</span></div><div class="preview" id="preview">
         <div class="empty" id="empty"><b>MASCHA STUDIO</b><br/>El resultado generado aparecerá aquí.</div>
         <img id="result" alt="Resultado generado" draggable="false"/><img id="productLayer" alt="Producto aislado editable" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;mix-blend-mode:multiply"/><div id="productTint" aria-hidden="true"></div>
         <img id="artOverlay" class="artOverlay" alt="Arte editable" style="display:none"/>
@@ -260,7 +260,7 @@ a.download{display:inline-block;margin-top:10px;color:var(--teal2);text-decorati
       <div class="small" id="layerNotice" style="display:none">Descarga combinada: producto + arte, conservando la edición visual.</div>
     </section>
   </div>
-<section class="layerManager" id="layerManager"><h2>CAPAS INDEPENDIENTES</h2><div class="layerRows"><button class="secondary active" id="toggleBackground">FONDO: VISIBLE</button><button class="secondary active" id="toggleProduct">PRODUCTO: VISIBLE</button><button class="secondary active" id="toggleDesign">DISEÑO: VISIBLE</button></div><div class="backgroundPrompt"><label class="label">PROMPT DEL FONDO — SIN AFECTAR PRODUCTO NI DISEÑO</label><textarea id="backgroundPrompt" placeholder="Ejemplo: fondo de estudio claro, sombra suave, estilo premium..."></textarea><input id="backgroundFile" type="file" accept="image/*" style="margin-top:8px"><div class="layerHint">El prompt queda preparado para generación; el archivo permite cargar un fondo local sin consumir API.</div></div></section>
+<section class="layerManager" id="layerManager"><h2>CAPAS INDEPENDIENTES</h2><div class="layerRows"><button class="secondary active" id="toggleBackground">FONDO: VISIBLE</button><button class="secondary active" id="toggleProduct">PRODUCTO: VISIBLE</button><button class="secondary active" id="toggleDesign">DISEÑO: VISIBLE</button></div></section>
 </main>
 
 <script>
