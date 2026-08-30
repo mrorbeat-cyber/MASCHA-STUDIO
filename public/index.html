@@ -528,7 +528,7 @@ $("downloadComposite").addEventListener("click",async()=>{
   try{
     const base=await loadImageForCanvas(currentImage);
     const canvas=document.createElement("canvas");
-    const fmt={web:[1600,1600],instagram:[1080,1080],instagramStory:[1080,1920],facebook:[1200,1500],tiktok:[1080,1920],pinterest:[1000,1500],print:[2400,3000],custom:[base.naturalWidth||base.width,base.naturalHeight||base.height]}[$("formatSelect")?.value||"web"];
+    const fmt={web:[2400,2400],instagram:[1080,1080],instagramStory:[1080,1920],facebook:[1200,1500],tiktok:[1080,1920],pinterest:[1000,1500],print:[4800,6000],custom:[base.naturalWidth||base.width,base.naturalHeight||base.height]}[$("formatSelect")?.value||"web"];
     canvas.width=fmt[0];
     canvas.height=fmt[1];
     const ctx=canvas.getContext("2d");
@@ -538,18 +538,16 @@ $("downloadComposite").addEventListener("click",async()=>{
     ctx.fillStyle="#ffffff"; ctx.fillRect(0,0,canvas.width,canvas.height);
     ctx.drawImage(base,dx,dy,drawnW,drawnH);
 
-    const previewBox=$("preview").getBoundingClientRect();
+    ctx.imageSmoothingEnabled=true; ctx.imageSmoothingQuality="high";
     const resultBox=$("result").getBoundingClientRect();
-    const scaleX=canvas.width/resultBox.width;
-    const scaleY=canvas.height/resultBox.height;
-    const offsetX=(resultBox.left-previewBox.left)*scaleX;
-    const offsetY=(resultBox.top-previewBox.top)*scaleY;
+    const artBox=$("artOverlay").getBoundingClientRect();
+    const xPct=((artBox.left+artBox.width/2-resultBox.left)/resultBox.width);
+    const yPct=((artBox.top+artBox.height/2-resultBox.top)/resultBox.height);
+    const widthPct=artBox.width/resultBox.width;
 
     if(referenceImage && artOverlay.style.display!=="none"){
       const art=await loadImageForCanvas(referenceImage);
-      const xPct=Number($("artX").value)/100;
-      const yPct=Number($("artY").value)/100;
-      const widthPct=Number($("artSize").value)/100;
+      
       const rot=Number($("artRotation").value)*Math.PI/180;
       const drawW=drawnW*widthPct;
       const drawH=drawW*(art.naturalHeight/art.naturalWidth);
