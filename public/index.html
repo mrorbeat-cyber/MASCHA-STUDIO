@@ -53,7 +53,7 @@ a.download{display:inline-block;margin-top:10px;color:var(--teal2);text-decorati
 </head>
 <body>
 <main>
-  <div class="top"><div class="brand">MASCHA <b>STUDIO</b></div><div class="pill">POD · AHORRO INTELIGENTE</div></div>
+  <div class="top"><div class="brand">MASCHA <b>STUDIO</b></div><div class="pill">POD · AHORRO INTELIGENTE</div></div><div class="headerLayers" aria-label="Controles rápidos de capas"><span>CAPAS</span><button class="secondary mini" id="topToggleBackground">FONDO: VISIBLE</button><button class="secondary mini" id="topToggleProduct">PRODUCTO: VISIBLE</button><button class="secondary mini" id="topToggleDesign">DISEÑO: VISIBLE</button></div>
 
   <div class="workspaceDock" id="workspaceDock"><span class="workspaceTab active">MOCKUP DE PRODUCTO</span></div><div class="layout">
     <section class="card">
@@ -302,7 +302,7 @@ $("saveCap").addEventListener("click",async()=>{
   const d=await r.json();
   if(!r.ok) return setStatus(d.error||"No se pudo guardar.");
   setStatus(`Tope mensual actualizado a $${Number(d.cap).toFixed(2)}.`);
-  loadStatus();
+  const topLayerMap={topToggleBackground:"toggleBackground",topToggleProduct:"toggleProduct",topToggleDesign:"toggleDesign"};Object.entries(topLayerMap).forEach(([top,bottom])=>$(top)?.addEventListener("click",()=>$(bottom)?.click()));loadStatus();
 });
 
 $("generate").addEventListener("click",async()=>{
