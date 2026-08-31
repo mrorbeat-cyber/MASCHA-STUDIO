@@ -27,4 +27,4 @@ No pongas la clave de OpenAI en `public/`, JavaScript del navegador ni en el rep
 El límite de USD 10 implementado aquí es un **guardarraíl interno de MASCHA STUDIO basado en estimaciones**. No sustituye los límites/presupuestos de facturación que configures en OpenAI Platform. El costo real de una solicitud puede variar según imagen de entrada, tokens, calidad y parámetros de API.
 
 ## Modelo
-La app usa `gpt-image-2`, recomendado actualmente por OpenAI para generación y edición de imágenes.
+La app usa `gpt-image-2`, recomendado actualmente por OpenAI para generación y edición de imágenes. 
