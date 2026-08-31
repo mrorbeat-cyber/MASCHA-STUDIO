@@ -33,4 +33,18 @@
 </script>
 <script>
 (()=>{const d=document.getElementById('download'),f=document.getElementById('format');if(!d)return;d.onclick=()=>{let parts=(f.value||'1600x1600|png').split('|'),wh=parts[0];if(wh==='custom')wh=prompt('Escribe ancho x alto','2000x1500');if(!wh||!/^[0-9]+x[0-9]+$/.test(wh))return;let [w,h]=wh.split('x').map(Number),c=document.createElement('canvas'),x=c.getContext('2d'),p=document.getElementById('preview').getBoundingClientRect();c.width=w;c.height=h;['background','product','design'].forEach(id=>{let e=document.getElementById(id);if(!e||e.style.display==='none'||!e.src||!e.naturalWidth)return;let r=e.getBoundingClientRect(),sx=w/p.width,sy=h/p.height;x.drawImage(e,(r.left-p.left)*sx,(r.top-p.top)*sy,r.width*sx,r.height*sy)});let ext=parts[1]||'png',mime=ext==='jpg'?'image/jpeg':ext==='webp'?'image/webp':'image/png',a=document.createElement('a');a.download='mascha-composicion.'+ext;a.href=c.toDataURL(mime,.95);a.click()}})();
+</script>
+<script id="visual-fusion-compat">
+(()=>{
+ const d=document.getElementById('design'),m=document.getElementById('maskFile'),p=document.querySelector('.panel');
+ if(!d)return;
+ const apply=()=>{
+  if(d.style.display==='none'){const s=document.getElementById('status');if(s)s.textContent='Carga primero un Diseño para aplicar fusión.';return}
+  d.style.mixBlendMode='multiply';d.style.opacity='.94';d.style.filter='contrast(1.12) saturate(1.06) drop-shadow(0 2px 3px rgba(0,0,0,.38))';
+  const f=m?.files?.[0];if(f){const u=URL.createObjectURL(f);d.style.webkitMaskImage='url("'+u+'")';d.style.maskImage='url("'+u+'")';d.style.webkitMaskSize='100% 100%';d.style.maskSize='100% 100%';d.style.webkitMaskRepeat='no-repeat';d.style.maskRepeat='no-repeat'}
+  const s=document.getElementById('status');if(s)s.textContent='Fusión visual aplicada: mezcla, sombras y máscara activas.';
+ };
+ if(p&&!document.getElementById('fusionVisual')){const b=document.createElement('button');b.id='fusionVisual';b.textContent='FUSIÓN VISUAL';b.title='Recupera el efecto visual de integración de la versión anterior';b.style.width='100%';b.style.marginTop='7px';p.appendChild(b);b.onclick=apply}
+ m?.addEventListener('change',()=>{if(d.style.mixBlendMode==='multiply')apply()});
+})();
 </script></body></html>
