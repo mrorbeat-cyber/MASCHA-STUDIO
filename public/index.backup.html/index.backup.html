@@ -1,0 +1,608 @@
+<!doctype html>       
+<html lang="es"> 
+<head>   
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#071019"/>
+<link rel="manifest" href="/manifest.webmanifest"/>
+<link rel="apple-touch-icon" href="/icon.svg"/>
+<title>MASCHA STUDIO</title>
+<style>
+:root{--bg:#070b11;--panel:#0e1721;--panel2:#09121a;--line:#263847;--text:#f7fafc;--muted:#94a4b3;--teal:#25d6c4;--teal2:#7ef2e7;--warn:#ffcc66}
+*{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at 50% -10%,#17333b 0,#071019 35%,#05090e 100%);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+main{max-width:1180px;margin:auto;padding:18px}.top{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px}.brand{font-size:28px;font-weight:900;letter-spacing:.6px}.brand b{color:var(--teal)}
+.pill{border:1px solid #236b65;color:var(--teal2);background:#09211f;padding:7px 10px;border-radius:999px;font-size:12px}
+.layout{display:grid;grid-template-columns:380px 1fr;gap:16px}.card{background:rgba(14,23,33,.95);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 22px 60px rgba(0,0,0,.28)}
+h1{font-size:19px;margin:0 0 8px}.muted{color:var(--muted);font-size:13px;line-height:1.45}.label{display:block;font-size:12px;color:#dce5eb;font-weight:800;margin:14px 0 7px}
+textarea,input,select{width:100%;background:#071019;border:1px solid #2b4050;color:white;border-radius:12px;padding:12px;font-size:14px;outline:none}textarea{min-height:170px;resize:vertical}textarea:focus,input:focus,select:focus{border-color:var(--teal)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.btnrow{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+button{border:0;border-radius:12px;padding:12px 15px;font-weight:850;cursor:pointer}.primary{background:var(--teal);color:#03201d}.secondary{background:#172531;color:#fff;border:1px solid #324957}.danger{background:#312027;color:#fff;border:1px solid #5b3340}
+.preview{min-height:540px;border:1px dashed #385163;border-radius:16px;background:#071019;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}.preview img{max-width:100%;max-height:720px;display:block}.empty{text-align:center;padding:30px;color:var(--muted)}
+.artOverlay{
+position:absolute;left:50%;top:50%;width:34%;height:auto;transform:translate(-50%,-50%) rotate(0deg);
+transform-origin:center center;pointer-events:auto;cursor:move;user-select:none;touch-action:none;
+opacity:1;mix-blend-mode:normal;filter:drop-shadow(0 3px 5px rgba(0,0,0,.35));outline:0 solid transparent;cursor:grab;
+}
+.overlay{
+position:absolute;left:50%;top:10%;transform:translateX(-50%);
+max-width:86%;text-align:center;font-size:42px;font-weight:900;
+text-shadow:0 3px 18px #000,0 1px 2px #000;
+pointer-events:auto;cursor:move;user-select:none;white-space:pre-wrap;
+padding:6px 10px;border-radius:10px;
+}
+.editorGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.editorRow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.mini{padding:9px 11px;font-size:12px}
+.rangeWrap{display:grid;grid-template-columns:1fr 70px;gap:8px;align-items:center}
+.rangeWrap input[type=range]{padding:0}
+.fontPreview{font-size:12px;color:#96a6b5;margin-top:5px}
+.check{display:flex;align-items:center;gap:7px;font-size:12px;color:#d7e0e7}
+.check input{width:auto}
+
+.usage{margin-top:12px;padding:12px;background:#09131c;border:1px solid #263a49;border-radius:14px}.usagehead{display:flex;justify-content:space-between;font-size:13px}.bar{height:9px;background:#1c2832;border-radius:999px;margin-top:8px;overflow:hidden}.fill{height:100%;width:0;background:linear-gradient(90deg,var(--teal),#f2d16b)}
+.cost{margin-top:8px;color:var(--warn);font-size:12px}.secondaryPanel{display:none;margin-top:14px;border-top:1px solid #223440;padding-top:14px}.status{margin-top:12px;font-size:13px;color:var(--muted);min-height:20px}
+a.download{display:inline-block;margin-top:10px;color:var(--teal2);text-decoration:none;font-weight:800}.small{font-size:11px;color:#758796;margin-top:8px}
+@media(max-width:820px){.layout{grid-template-columns:1fr}.preview{min-height:360px}.top{align-items:flex-start}.brand{font-size:24px}}
+.marketDesk{margin-top:16px;background:linear-gradient(145deg,rgba(14,23,33,.98),rgba(8,18,27,.98));border-color:#2b5961}.marketHero{display:flex;justify-content:space-between;gap:12px}.eyebrow{font-size:10px;letter-spacing:1.6px;color:var(--teal2);font-weight:900}.marketBadge{font-size:10px;color:#9fe8df;border:1px solid #286c68;border-radius:999px;padding:6px 9px}.marketGrid{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:10px;align-items:end;margin-top:14px}.marketPanel{margin-top:14px;padding:13px;border:1px solid #24404e;border-radius:14px;background:rgba(5,14,22,.55)}.panelTitle{font-size:11px;font-weight:900;color:#a9bac6;letter-spacing:.8px;margin-bottom:10px}.sourceGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.sourceCard{display:grid;grid-template-columns:1fr auto;gap:2px 8px;padding:9px 10px;border:1px solid #253f4d;border-radius:10px}.sourceCard b{font-size:12px}.sourceCard span{font-size:11px;color:#9dafba}.sourceCard a{grid-row:1/3;grid-column:2;color:var(--teal2);font-size:11px;align-self:center;text-decoration:none}.marketNote{margin-top:10px;padding:10px;border:1px solid #263a49;border-radius:10px;color:#b7c6d0;font-size:12px;line-height:1.4}.timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.timeline div{padding:9px;border-radius:10px;background:#0b1c26;border-left:3px solid var(--teal)}.timeline b{display:block;font-size:10px;color:var(--teal2)}.timeline span{font-size:11px;color:#b4c2ca}.marketFooter{display:flex;gap:8px;align-items:center;margin-top:12px}@media(max-width:900px){.marketGrid{grid-template-columns:1fr 1fr}.marketGrid button{grid-column:1/-1}.timeline{grid-template-columns:1fr 1fr}.sourceGrid{grid-template-columns:1fr}}
+.exportOptions{margin-top:12px;padding-top:12px;border-top:1px solid #223440}.exportOptions select{margin-top:2px}
+.baseTools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 10px}.baseTools .small{margin:0}dialog{background:#0e1721;color:var(--text);border:1px solid var(--line);border-radius:16px;padding:18px;max-width:420px}dialog::backdrop{background:rgba(0,0,0,.65)}
+.productTools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}.productTools .label{margin:0}.productTools input{width:54px;height:32px;padding:2px}.preview{touch-action:none}.artOverlay{cursor:grab;user-select:none;-webkit-user-drag:none}
+#productTint{position:absolute;inset:0;pointer-events:none;background:#fff;opacity:0;mix-blend-mode:multiply}
+.layerTabs{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0}.layerTabs button{font-size:11px}
+<style>.layerManager{margin-top:14px;padding:14px;border:1px solid #2b4655;border-radius:14px;background:#09131c}.layerManager h2{font-size:13px;margin:0 0 8px}.layerRows{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.layerRows button{font-size:11px;padding:10px 6px}.layerRows button.active{background:#25d6c4;color:#03201d}.backgroundPrompt{margin-top:10px}.backgroundPrompt textarea{min-height:70px;font-size:12px}.layerHint{font-size:11px;color:#94a4b3;margin-top:8px}@media(max-width:700px){.layerRows{grid-template-columns:1fr}}<style>html,body{background:#000!important}body{color:#f7fafc}.card,.layerManager{background:#080d12!important;border-color:#16444b!important;box-shadow:0 12px 35px rgba(0,0,0,.45)}.preview{background:#020506!important;min-height:clamp(420px,62vh,720px)}.layout{grid-template-columns:minmax(280px,340px) minmax(0,1fr);align-items:start}.layerManager{position:sticky;bottom:10px;z-index:5;padding:10px;margin-top:10px;backdrop-filter:blur(12px)}.layerRows{grid-template-columns:repeat(3,1fr)!important}.layerRows button,.btnrow button{transition:.18s ease;border:1px solid #235761!important}.layerRows button:hover,.btnrow button:hover{transform:translateY(-1px);border-color:var(--teal)!important}.layerRows button.active{background:var(--teal)!important;color:#001411!important}.backgroundPrompt{display:grid;grid-template-columns:1fr 180px;gap:8px;align-items:end}.backgroundPrompt .label{grid-column:1/-1}.backgroundPrompt textarea{min-height:54px}.backgroundPrompt input{height:42px}@media(max-width:900px){.layout{grid-template-columns:1fr}.preview{min-height:55vh}.layerManager{position:static}.backgroundPrompt{grid-template-columns:1fr}.backgroundPrompt input{width:100%}}@media(min-width:901px){main{max-width:1400px}}<style>.workspaceDock{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px;margin:0 0 12px;border:1px solid #18515a;border-radius:14px;background:#05090d;position:sticky;top:8px;z-index:20}.workspaceTab{background:#0b1820;color:#dceef0;border:1px solid #235761;border-radius:10px;padding:10px 13px;font-size:11px;font-weight:900}.workspaceTab.active{background:#25d6c4;color:#001411}#workspaceState{font-size:11px;color:#90a9b3;margin-left:auto}</style></style></style></style>
+<style>img:not([src]),img[src=""]{display:none!important}.headerLayers{position:sticky;top:8px;z-index:30}.layerManager{margin-top:12px}</style><style>@media(max-width:700px){main{padding:12px}.headerLayers{gap:6px;justify-content:stretch}.headerLayers span{width:100%;margin:0 0 2px}.headerLayers button{flex:1;min-width:0;padding:9px 6px;font-size:10px}}</style><style>#result{width:100%;height:100%;max-width:none;max-height:none;object-fit:cover}#productLayer{width:100%!important;height:100%!important;object-fit:contain}</style><style>.realism-on{mix-blend-mode:multiply!important;opacity:.88!important;filter:contrast(1.12) saturate(1.05) drop-shadow(0 2px 4px rgba(0,0,0,.28))!important}</style><style>.realismPanel{margin:10px 0;padding:12px;border:1px solid #235761;border-radius:12px;background:#07131a}.realismPanel>b{font-size:12px;color:var(--teal2)}.realismInputs{display:flex;gap:8px;align-items:end;flex-wrap:wrap;margin-top:8px}.realismInputs label{font-size:11px;color:#cfe1e5;flex:1;min-width:180px}.realismInputs input{margin-top:4px;padding:7px;font-size:11px}.realismInputs button{align-self:end}@media(max-width:700px){.realismInputs{display:grid;grid-template-columns:1fr}.realismInputs label{min-width:0}}</style><style>.historyBar{display:flex;gap:8px;margin:0 0 10px;padding:8px;background:#080d12;border:1px solid #16444b;border-radius:12px}.historyBar button{flex:1}</style><style>#adPanel{display:block!important}.editorGrid,.editorRow,.exportOptions{display:grid!important}.historyBar{position:sticky;top:8px;z-index:40}.historyBar button:disabled{opacity:.45}</style><style>.transformBar{gap:4px;padding:6px}.transformBar span{width:auto;margin-right:4px}.transformBar button{padding:7px 6px;font-size:10px;white-space:nowrap;min-width:0}.historyBar{gap:4px;padding:6px}.historyBar button{padding:7px 9px;font-size:10px}@media(max-width:700px){.transformBar{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}.transformBar span{grid-column:1/-1}.transformBar button{width:100%;padding:8px 3px;font-size:9px}.historyBar{display:grid;grid-template-columns:repeat(3,1fr)}.historyBar button{width:100%;padding:8px 3px;font-size:9px}}</style><style id="history-arrows-fix">.historyBar #undoAction,.historyBar #redoAction{font-size:21px;line-height:1;min-width:42px;padding:6px 10px;font-weight:900}.historyBar #undoAction:disabled,.historyBar #redoAction:disabled{opacity:.4;cursor:not-allowed}@media(max-width:700px){.historyBar #undoAction,.historyBar #redoAction{min-width:36px;padding:6px 8px;font-size:19px}}
+</style></head>
+<body>
+<main>
+  <div class="top"><div class="brand">MASCHA <b>STUDIO</b></div><div class="historyBar"><button class="secondary mini" id="newComposition" type="button">NUEVO</button><button class="secondary mini" id="undoAction" type="button" aria-label="Retroceder" title="Retroceder">↶</button><button class="secondary mini" id="redoAction" type="button" aria-label="Adelantar" title="Adelantar">↷</button></div><div class="pill">POD · AHORRO INTELIGENTE</div></div><div class="headerLayers" aria-label="Controles rápidos de capas"><span>CAPAS</span><button class="secondary mini" id="toggleBackground">FONDO: VISIBLE</button><button class="secondary mini" id="toggleDesign">DISEÑO: VISIBLE</button><button class="secondary mini" id="toggleProduct">PRODUCTO: VISIBLE</button></div>
+
+  <div class="workspaceDock" id="workspaceDock"><span class="workspaceTab active">MOCKUP DE PRODUCTO</span></div><div class="layout">
+    <section class="card">
+      <h1>¿Qué deseas crear?</h1>
+      <div class="muted">Usa aquí el prompt ya refinado en ChatGPT para evitar regeneraciones innecesarias.</div>
+
+      <label class="label">SOLICITUD</label>
+      <textarea id="prompt" placeholder="Describe producto, diseño, escena, iluminación y estilo..."></textarea>
+
+      <label class="label">IMAGEN DE REFERENCIA / ARTE</label>
+      <input id="file" type="file" accept="image/*"/>
+      <label class="check" style="margin-top:9px">
+        <input id="editableLayers" type="checkbox" checked/>
+        Mantener fondo y arte en capas separadas
+      </label>
+      <div class="small">Activado: la IA crea el producto/escena SIN imprimir el arte; tu archivo se coloca encima como capa local editable.</div>
+
+      <div class="row">
+        <div>
+          <label class="label">MODO</label>
+          <select id="mode">
+            <option value="preview">Previsualización económica</option>
+            <option value="final">Final alta calidad</option>
+          </select>
+        </div>
+        <div>
+          <label class="label">TOPE MENSUAL USD</label>
+          <input id="cap" type="number" min="0" step="1" value="10"/>
+        </div>
+      </div>
+
+      <div class="cost" id="estimate">Costo estimado de esta acción: —</div>
+      <div class="btnrow">
+        <button class="primary" id="generate">GENERAR RESULTADO</button>
+        <button class="secondary" id="saveCap">GUARDAR TOPE</button>
+      </div>
+
+      <div class="usage">
+        <div class="usagehead"><span>Consumo mensual</span><b id="usageText">$0.00 / $10.00</b></div>
+        <div class="bar"><div class="fill" id="fill"></div></div>
+        <div class="small" id="remaining">Saldo: $10.00</div>
+      </div>
+      <div class="status" id="status">Preparado.</div>
+    </section>
+
+    <section class="card">
+      <h1>Resultado visual</h1>
+      <div class="baseTools"><button class="secondary mini" id="openBase" type="button">CARGAR FONDO / MOCKUP BASE</button><input id="baseFileDirect" type="file" accept="image/*" style="display:none"><span class="small">Carga una imagen base sin regenerar ni gastar API.</span></div><div class="productTools"><label class="label">CAPA DE COLOR SÓLIDO</label><input id="productColor" type="color" value="#ffffff"><input id="productFile" type="file" accept="image/*" aria-label="Cargar producto aislado"><span class="small">Mapa opcional de pliegues: controla la deformación del diseño.</span><span class="small">Opcional: PNG blanco/negro para recortar el diseño a la forma de la prenda.</span><span class="small">Para recolorear solo la prenda, carga aquí un PNG/JPG del mug o camiseta aislado.</span><span class="small">Cambia el color de la capa seleccionada sin alterar el fondo ni el diseño.</span><button class="secondary mini" id="realismToggle" type="button">APLICAR REALISMO</button></div><section class="realismPanel" id="realismPanel"><b>MÁSCARA Y PLIEGUES DEL PRODUCTO</b><div class="small">Carga una máscara PNG de la prenda y, opcionalmente, un mapa de pliegues. Se aplican localmente sin créditos.</div><div class="realismInputs"><label>Máscara <input id="maskFile" type="file" accept="image/png,image/*"></label><label>Mapa de pliegues <input id="displacementFile" type="file" accept="image/png,image/*"></label><button class="secondary mini" id="applyMask" type="button">APLICAR MÁSCARA Y PLIEGUES</button></div></section><style id="layer-edit-fix">.layerEditBar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:8px 0;padding:7px 9px;background:#07131a;border:1px solid #235761;border-radius:10px}.layerEditBar span{font-size:11px;color:#9fb3bf;font-weight:800}.layerEditBar button{padding:7px 10px;font-size:10px}.layerEditBar button.active{background:var(--teal);color:#03201d;border-color:var(--teal)}#productLayer.layer-editable{pointer-events:auto!important;cursor:grab!important;max-width:none!important;max-height:none!important}</style><div class="layerEditBar" id="layerEditBar"><span>EDITAR CAPA:</span><button class="secondary mini active" id="editDesign" type="button">DISEÑO</button><button class="secondary mini" id="editProduct" type="button">PRODUCTO</button><button class="secondary mini" id="editBackground" type="button">FONDO</button><span id="editLayerStatus">Capa activa: DISEÑO</span></div><script id="layer-edit-fix-script">
+(()=>{const q=id=>document.getElementById(id), preview=q("preview"), art=q("artOverlay"), product=q("productLayer"), result=q("result");let active="design",drag=false,pid=null,sx=0,sy=0,bx=50,by=50;const state={design:{x:50,y:50,size:34,rot:0},product:{x:50,y:50,size:100,rot:0},background:{x:50,y:50,size:100,rot:0}};function setStatus(t){q("editLayerStatus")&&(q("editLayerStatus").textContent=t);if(typeof window.setStatus==="function")window.setStatus(t)}function el(){return active==="design"?art:active==="product"?product:result}function apply(){const e=el(),s=state[active];if(!e)return;e.classList.toggle("layer-editable",active==="product");if(active==="background"){e.style.position="absolute";e.style.inset="0";e.style.width="100%";e.style.height="100%";e.style.transform="none";e.style.objectFit="cover";return}e.style.position="absolute";e.style.left=s.x+"%";e.style.top=s.y+"%";e.style.inset="auto";e.style.width=s.size+"%";e.style.height="auto";e.style.maxWidth="none";e.style.maxHeight="none";e.style.transform="translate(-50%,-50%) rotate("+s.rot+"deg)";e.style.display="block"}function select(which){active=which;document.querySelectorAll("#layerEditBar button").forEach(b=>b.classList.remove("active"));q("edit"+which[0].toUpperCase()+which.slice(1))?.classList.add("active");setStatus("Capa activa: "+which.toUpperCase());apply()}q("editDesign")?.addEventListener("click",()=>select("design"));q("editProduct")?.addEventListener("click",()=>select("product"));q("editBackground")?.addEventListener("click",()=>select("background"));function n(id,v){let x=q(id);if(x){x.value=Math.round(v);x.dispatchEvent(new Event("input",{bubbles:true}))}}function sync(){let s=state[active];if(active==="design"){s.x=Number(q("artX")?.value||50);s.y=Number(q("artY")?.value||50);s.size=Number(q("artSize")?.value||34);s.rot=Number(q("artRotation")?.value||0)}else{n("artX",s.x);n("artY",s.y);n("artSize",s.size);n("artRotation",s.rot)}apply()}["artX","artY","artSize","artRotation"].forEach(id=>q(id)?.addEventListener("input",()=>{if(active==="design"){state.design.x=Number(q("artX").value);state.design.y=Number(q("artY").value);state.design.size=Number(q("artSize").value);state.design.rot=Number(q("artRotation").value);apply()}else{apply()}}));function start(e){if(e.target===art&&active!=="design")select("design");if(e.target===product&&active!=="product")select("product");let target=el();if(!target||target.style.display==="none"||active==="background"&&e.target!==preview&&e.target!==result)return;if(active!=="background"&&e.target!==target)return;drag=true;pid=e.pointerId;sx=e.clientX;sy=e.clientY;bx=state[active].x;by=state[active].y;preview?.setPointerCapture?.(pid);target.style.cursor="grabbing";e.preventDefault()}function move(e){if(!drag)return;let b=preview.getBoundingClientRect(),s=state[active];s.x=Math.max(0,Math.min(100,bx+(e.clientX-sx)/b.width*100));s.y=Math.max(0,Math.min(100,by+(e.clientY-sy)/b.height*100));if(active==="design"){n("artX",s.x);n("artY",s.y)}else apply();e.preventDefault()}function stop(){drag=false;pid=null;if(product)product.style.cursor="grab"}preview?.addEventListener("pointerdown",start);preview?.addEventListener("pointermove",move);["pointerup","pointercancel","lostpointercapture"].forEach(ev=>preview?.addEventListener(ev,stop));window.addEventListener("pointerup",stop,true);window.addEventListener("blur",stop);if(product){product.style.pointerEvents="auto";product.addEventListener("load",()=>{if(!state.product.size)state.product.size=100;apply()})}document.querySelectorAll('input[type="file"]').forEach(i=>i.addEventListener("change",()=>setTimeout(()=>{if(product?.src)product.style.pointerEvents="auto"},50)));})();</script><div class="preview" id="preview">
+        <div class="empty" id="empty"><b>MASCHA STUDIO</b><br/>El resultado generado aparecerá aquí.</div>
+        <img id="result" alt="Resultado generado" draggable="false"/><img id="productLayer" alt="Producto aislado editable" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;mix-blend-mode:multiply"/><div id="productTint" aria-hidden="true"></div>
+        <img id="artOverlay" class="artOverlay" alt="Arte editable" style="display:none"/>
+        <div class="overlay" id="overlay"></div>
+      </div>
+
+      <div class="secondaryPanel" id="adPanel">
+        <div id="artPanel">
+          <label class="label">ARTE / DISEÑO — CAPA LOCAL EDITABLE</label>
+          <div class="muted">Este arte queda separado de la fotografía base. Puedes moverlo y cambiar su tamaño sin nueva generación.</div>
+
+          <div class="editorGrid">
+            <div>
+              <label class="label">TAMAÑO DEL ARTE</label>
+              <div class="rangeWrap">
+                <input id="artSize" type="range" min="8" max="85" value="34"/>
+                <input id="artSizeNum" type="number" min="8" max="85" value="34"/>
+              </div>
+            </div>
+            <div>
+              <label class="label">ROTACIÓN</label>
+              <div class="rangeWrap">
+                <input id="artRotation" type="range" min="-30" max="30" value="0"/>
+                <input id="artRotationNum" type="number" min="-30" max="30" value="0"/>
+              </div>
+            </div>
+            <div>
+              <label class="label">POSICIÓN HORIZONTAL</label>
+              <div class="rangeWrap">
+                <input id="artX" type="range" min="5" max="95" value="50"/>
+                <input id="artXNum" type="number" min="5" max="95" value="50"/>
+              </div>
+            </div>
+            <div>
+              <label class="label">POSICIÓN VERTICAL</label>
+              <div class="rangeWrap">
+                <input id="artY" type="range" min="5" max="95" value="50"/>
+                <input id="artYNum" type="number" min="5" max="95" value="50"/>
+              </div>
+            </div>
+          </div>
+
+          <div class="btnrow">
+            <button class="secondary" id="centerArt">CENTRAR ARTE</button>
+            <button class="secondary" id="resetArt">REINICIAR ARTE</button>
+            <button class="danger" id="hideArt">OCULTAR ARTE</button>
+          </div>
+          <div class="small">También puedes arrastrar directamente el arte con el mouse. El fondo, el producto y el arte ya no tienen que quedar horneados en la misma fotografía.</div>
+        </div>
+
+        <div id="textTools" style="display:none"><label class="label">TEXTO PUBLICITARIO — SIN NUEVA GENERACIÓN</label>
+        <input id="adText" placeholder="Ejemplo: Un detalle que florece contigo"/>
+
+        <div class="editorGrid">
+          <div>
+            <label class="label">TIPOGRAFÍA</label>
+            <select id="fontFamily">
+              <optgroup label="Sans Serif">
+                <option value="Arial, sans-serif">Arial</option>
+                <option value="Helvetica, Arial, sans-serif">Helvetica</option>
+                <option value="Verdana, sans-serif">Verdana</option>
+                <option value="Trebuchet MS, sans-serif">Trebuchet MS</option>
+                <option value="Tahoma, sans-serif">Tahoma</option>
+              </optgroup>
+              <optgroup label="Serif">
+                <option value="Georgia, serif">Georgia</option>
+                <option value="Times New Roman, serif">Times New Roman</option>
+                <option value="Palatino Linotype, serif">Palatino</option>
+                <option value="Book Antiqua, serif">Book Antiqua</option>
+              </optgroup>
+              <optgroup label="Display / Impacto">
+                <option value="Impact, sans-serif">Impact</option>
+                <option value="Arial Black, sans-serif">Arial Black</option>
+                <option value="Franklin Gothic Medium, sans-serif">Franklin Gothic</option>
+                <option value="Copperplate, fantasy">Copperplate</option>
+              </optgroup>
+              <optgroup label="Script / Caligrafía">
+                <option value="Brush Script MT, cursive">Brush Script</option>
+                <option value="Segoe Script, cursive">Segoe Script</option>
+                <option value="Lucida Handwriting, cursive">Lucida Handwriting</option>
+              </optgroup>
+              <optgroup label="Retro / Western / Fiesta">
+                <option value="Rockwell, serif">Rockwell</option>
+                <option value="Courier New, monospace">Courier New</option>
+                <option value="Stencil Std, fantasy">Stencil</option>
+                <option value="Papyrus, fantasy">Papyrus</option>
+              </optgroup>
+            </select>
+            <div class="fontPreview" id="fontPreview">Vista previa de tipografía</div>
+          </div>
+
+          <div>
+            <label class="label">COLOR</label>
+            <input id="textColor" type="color" value="#ffffff"/>
+          </div>
+
+          <div>
+            <label class="label">TAMAÑO</label>
+            <div class="rangeWrap">
+              <input id="fontSize" type="range" min="18" max="110" value="42"/>
+              <input id="fontSizeNum" type="number" min="18" max="110" value="42"/>
+            </div>
+          </div>
+
+          <div>
+            <label class="label">ESPACIADO</label>
+            <div class="rangeWrap">
+              <input id="letterSpacing" type="range" min="-2" max="16" value="0"/>
+              <input id="letterSpacingNum" type="number" min="-2" max="16" value="0"/>
+            </div>
+          </div>
+
+          <div>
+            <label class="label">POSICIÓN VERTICAL</label>
+            <div class="rangeWrap">
+              <input id="textY" type="range" min="2" max="88" value="10"/>
+              <input id="textYNum" type="number" min="2" max="88" value="10"/>
+            </div>
+          </div>
+
+          <div>
+            <label class="label">ANCHO MÁXIMO</label>
+            <div class="rangeWrap">
+              <input id="textWidth" type="range" min="30" max="95" value="86"/>
+              <input id="textWidthNum" type="number" min="30" max="95" value="86"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="editorRow">
+          <button class="secondary mini" data-align="left">IZQUIERDA</button>
+          <button class="secondary mini" data-align="center">CENTRO</button>
+          <button class="secondary mini" data-align="right">DERECHA</button>
+        </div>
+
+        <div class="editorRow">
+          <label class="check"><input id="shadowToggle" type="checkbox" checked/> Sombra</label>
+          <label class="check"><input id="outlineToggle" type="checkbox"/> Contorno</label>
+          <label class="check"><input id="bgToggle" type="checkbox"/> Fondo</label>
+          <label class="check"><input id="boldToggle" type="checkbox" checked/> Negrita</label>
+        </div>
+
+        <div class="btnrow">
+          <button class="primary" id="applyText">APLICAR TEXTO</button>
+          <button class="secondary" id="removeText">QUITAR TEXTO</button>
+          <button class="secondary" id="resetTextStyle">REINICIAR ESTILO</button>
+        </div>
+
+        <div class="small">
+          Todo este editor funciona localmente y no genera una nueva llamada a la API.
+          También puedes arrastrar el texto directamente sobre la imagen.
+        </div>
+      </div>
+
+      </div><div class="exportOptions"><label class="label">FORMATO DE SALIDA</label><select id="formatSelect"><option value="web">Web — 1600 px</option><option value="instagram">Instagram publicación — 1080 × 1080</option><option value="instagramStory">Instagram historia / Reels — 1080 × 1920</option><option value="facebook">Facebook — 1200 × 1500</option><option value="tiktok">TikTok — 1080 × 1920</option><option value="pinterest">Pinterest — 1000 × 1500</option><option value="print">Impresión — 300 DPI</option><option value="custom">Personalizado</option></select><div class="small">El selector adapta el lienzo de salida sin deformar el producto.</div></div><button id="downloadComposite" class="secondary" style="display:inline-block;margin-top:12px">DESCARGAR COMPOSICIÓN</button>
+      <div class="small" id="layerNotice" style="display:none">Descarga combinada: producto + arte, conservando la edición visual.</div>
+    </section>
+  </div>
+
+</main>
+
+<script>
+let currentImage = "";
+let referenceImage = "";
+let estimates={preview:.04, final:.14};
+const $=id=>document.getElementById(id);
+
+function setStatus(t){ $("status").textContent=t; }
+function refreshEstimate(){ $("estimate").textContent=`Costo estimado de esta acción: $${(estimates[$("mode").value]||0).toFixed(2)}`; }
+async function loadStatus(){
+  try{
+    const r=await fetch("/api/status"); const d=await r.json();
+    estimates=d.estimates||estimates;
+    $("cap").value=d.cap;
+    $("usageText").textContent=`$${d.spent.toFixed(2)} / $${d.cap.toFixed(2)}`;
+    $("remaining").textContent=`Saldo interno: $${d.remaining.toFixed(2)}`;
+    const pct=d.cap>0?Math.min(100,(d.spent/d.cap)*100):100;
+    $("fill").style.width=pct+"%";
+    refreshEstimate();
+  }catch{ setStatus("No se pudo leer el estado del servidor."); }
+}
+$("file").addEventListener("change",()=>{
+  const f=$("file").files[0];
+  if(!f){ referenceImage=""; $("artOverlay").style.display="none"; return; }
+  const reader=new FileReader();
+  reader.onload=()=>{
+    referenceImage=reader.result;
+    $("artOverlay").src=referenceImage;
+  };
+  reader.readAsDataURL(f);
+});
+
+$("mode").addEventListener("change",refreshEstimate);
+
+$("saveCap").addEventListener("click",async()=>{
+  const cap=Number($("cap").value);
+  const r=await fetch("/api/cap",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({cap})});
+  const d=await r.json();
+  if(!r.ok) return setStatus(d.error||"No se pudo guardar.");
+  setStatus(`Tope mensual actualizado a $${Number(d.cap).toFixed(2)}.`);
+  $("realismToggle")?.addEventListener("click",()=>{const a=$("artOverlay");if(!a||a.style.display==="none")return setStatus("Carga primero un diseño.");const on=a.classList.toggle("realism-on");a.style.mixBlendMode=on?"multiply":"normal";a.style.opacity=on?".88":"1";a.style.filter=on?"contrast(1.12) saturate(1.05) drop-shadow(0 2px 4px rgba(0,0,0,.28))":"drop-shadow(0 3px 5px rgba(0,0,0,.35))";setStatus(on?"Realismo aplicado: luz y sombra integradas.":"Realismo desactivado.");});$("displacementFile")?.addEventListener("change",()=>{const f=$("displacementFile").files?.[0];if(!f)return;setStatus("Mapa de pliegues cargado. Se aplicará en la composición final.");});$("applyMask")?.addEventListener("click",()=>{const a=$("artOverlay"),m=$("maskFile")?.files?.[0],d=$("displacementFile")?.files?.[0];if(!a||a.style.display==="none")return setStatus("Carga primero un diseño.");if(m){const u=URL.createObjectURL(m);a.style.webkitMaskImage="url("+u+")";a.style.maskImage="url("+u+")";a.style.webkitMaskSize="100% 100%";a.style.maskSize="100% 100%";}a.classList.add("realism-on");setStatus(d?"Máscara y mapa de pliegues cargados para la composición.":"Máscara aplicada; carga un mapa de pliegues para deformación avanzada.");});let undoStack=[],redoStack=[],lastHistory="";function hist(){return {x:$("artX")?.value||50,y:$("artY")?.value||50,s:$("artSize")?.value||34,r:$("artRotation")?.value||0,product:$("productLayer")?.style.display||"none",background:$("result")?.style.display||""}}function histKey(v){return JSON.stringify(v)}function saveHist(){let now=hist(),key=histKey(now);if(!lastHistory)lastHistory=key;if(key!==lastHistory){undoStack.push(JSON.parse(lastHistory));if(undoStack.length>50)undoStack.shift();redoStack=[];lastHistory=key}$("undoAction")?.toggleAttribute("disabled",!undoStack.length);$("redoAction")?.toggleAttribute("disabled",!redoStack.length)}function applyHist(v){["x","y","s","r"].forEach(k=>{let id={x:"artX",y:"artY",s:"artSize",r:"artRotation"}[k];if($(id)){$(id).value=v[k];$(id).dispatchEvent(new Event("input",{bubbles:true}))}});if($("productLayer"))$("productLayer").style.display=v.product;if($("result"))$("result").style.display=v.background;updateArtStyle();lastHistory=histKey(hist());$("undoAction")?.toggleAttribute("disabled",!undoStack.length);$("redoAction")?.toggleAttribute("disabled",!redoStack.length)}["artX","artY","artSize","artRotation"].forEach(id=>$(id)?.addEventListener("change",saveHist));$("undoAction")?.addEventListener("click",()=>{if(!undoStack.length){setStatus("No hay cambios para retroceder.");return}redoStack.push(hist());applyHist(undoStack.pop());setStatus("Cambio anterior restaurado.");});$("redoAction")?.addEventListener("click",()=>{if(!redoStack.length){setStatus("No hay cambios para adelantar.");return}undoStack.push(hist());applyHist(redoStack.pop());setStatus("Cambio adelantado restaurado.");});$("newComposition")?.addEventListener("click",()=>{saveHist();$("result")?.removeAttribute("src");$("artOverlay")?.removeAttribute("src");$("productLayer")?.removeAttribute("src");["result","artOverlay","productLayer"].forEach(id=>$(id)?.style.setProperty("display","none"));$("empty")?.style.setProperty("display","block");setStatus("Composición nueva preparada.");});loadStatus();
+});
+
+$("generate").addEventListener("click",async()=>{
+  const prompt=$("prompt").value.trim();
+  if(!prompt) return setStatus("Escribe primero la solicitud.");
+  const est=estimates[$("mode").value]||0;
+  if(!confirm(`Esta acción puede consumir API. Estimado interno: $${est.toFixed(2)}. ¿Continuar?`)) return;
+
+  const fd=new FormData();
+  const useLayers=$("editableLayers").checked;
+  const layerPrompt = useLayers
+    ? `${prompt}
+
+INSTRUCCIÓN TÉCNICA OBLIGATORIA PARA MOCKUP EDITABLE:
+Genera únicamente la fotografía base del producto y su ambiente.
+NO imprimas, copies, redibujes ni integres en el producto el arte de referencia.
+NO añadas logotipos, ilustraciones ni texto al producto.
+Deja una zona visual limpia y realista para colocar el arte posteriormente como capa independiente en el navegador.`
+    : prompt;
+  fd.append("prompt",layerPrompt);
+  fd.append("mode",$("mode").value);
+  const f=$("file").files[0];
+  if(f && !useLayers) fd.append("image",f);
+
+  $("generate").disabled=true; setStatus(useLayers ? "Generando base editable por capas..." : "Generando imagen...");
+  try{
+    const r=await fetch("/api/generate",{method:"POST",body:fd});
+    const d=await r.json();
+    if(!r.ok) throw new Error(d.error||"Error al generar.");
+    currentImage=d.image;
+    $("result").src=currentImage;
+    $("result").style.display="block";
+    $("empty").style.display="none";
+    $("adPanel").style.display="block";
+    $("downloadComposite").style.display="inline-block";
+    $("layerNotice").style.display="block";
+    if($("editableLayers").checked && referenceImage){
+      $("artOverlay").src=referenceImage;
+      $("artOverlay").style.display="block";
+      setDefaultArtPlacement(prompt);
+    }else{
+      $("artOverlay").style.display="none";
+    }
+    setStatus(`Resultado listo. Estimado registrado: $${Number(d.chargedEstimate).toFixed(2)}.`);
+    loadStatus();
+  }catch(e){ setStatus(e.message); }
+  finally{ $("generate").disabled=false; }
+});
+
+
+
+const artOverlay = $("artOverlay");
+
+function setDefaultArtPlacement(promptText=""){
+  const p=promptText.toLowerCase();
+  let size=34, x=50, y=50;
+  if(p.includes("camiseta") || p.includes("tshirt") || p.includes("t-shirt")){ size=34; y=48; }
+  if(p.includes("mug") || p.includes("taza")){ size=38; y=50; }
+  $("artSize").value=$("artSizeNum").value=size;
+  $("artX").value=$("artXNum").value=x;
+  $("artY").value=$("artYNum").value=y;
+  $("artRotation").value=$("artRotationNum").value=0;
+  updateArtStyle();
+}
+function updateArtStyle(){
+  const size=Number($("artSize").value);
+  const x=Number($("artX").value);
+  const y=Number($("artY").value);
+  const rot=Number($("artRotation").value);
+  artOverlay.style.width=size+"%";
+  artOverlay.style.left=x+"%";
+  artOverlay.style.top=y+"%";
+  artOverlay.style.transform=`translate(-50%,-50%) rotate(${rot}deg)`;
+}
+function syncArtPair(rangeId,numId){
+  const r=$(rangeId), n=$(numId);
+  r.addEventListener("input",()=>{ n.value=r.value; updateArtStyle(); });
+  n.addEventListener("input",()=>{ r.value=n.value; updateArtStyle(); });
+}
+syncArtPair("artSize","artSizeNum");
+syncArtPair("artRotation","artRotationNum");
+syncArtPair("artX","artXNum");
+syncArtPair("artY","artYNum");
+
+$("centerArt").addEventListener("click",()=>{
+  $("artX").value=$("artXNum").value=50;
+  $("artY").value=$("artYNum").value=50;
+  updateArtStyle();
+});
+$("resetArt").addEventListener("click",()=>{
+  if(referenceImage){ artOverlay.src=referenceImage; artOverlay.style.display="block"; }
+  setDefaultArtPlacement($("prompt").value);
+});
+$("hideArt").addEventListener("click",()=>{
+  artOverlay.style.display = artOverlay.style.display==="none" ? "block" : "none";
+  $("hideArt").textContent = artOverlay.style.display==="none" ? "MOSTRAR ARTE" : "OCULTAR ARTE";
+});
+
+let artDragging=false, artStartX=0, artStartY=0, artStartLeft=50, artStartTop=50;
+artOverlay.addEventListener("pointerdown",e=>{if(false)return;
+  if(artOverlay.style.display==="none") return;
+  artDragging=true;
+  artOverlay.setPointerCapture(e.pointerId);
+  artStartX=e.clientX; artStartY=e.clientY;
+  artStartLeft=Number($("artX").value);
+  artStartTop=Number($("artY").value);
+});
+artOverlay.addEventListener("pointermove",e=>{
+  if(!artDragging) return;
+  const box=$("preview").getBoundingClientRect();
+  const dx=((e.clientX-artStartX)/box.width)*100;
+  const dy=((e.clientY-artStartY)/box.height)*100;
+  const x=Math.max(5,Math.min(95,artStartLeft+dx));
+  const y=Math.max(5,Math.min(95,artStartTop+dy));
+  $("artX").value=$("artXNum").value=Math.round(x);
+  $("artY").value=$("artYNum").value=Math.round(y);
+  updateArtStyle();
+});
+artOverlay.addEventListener("pointerup",()=>artDragging=false);
+artOverlay.addEventListener("pointercancel",()=>artDragging=false);
+
+const overlay = $("overlay");
+
+
+function syncPair(rangeId, numId, fn){
+  const r=$(rangeId), n=$(numId);
+  r.addEventListener("input",()=>{ n.value=r.value; fn(r.value); });
+  n.addEventListener("input",()=>{ r.value=n.value; fn(n.value); });
+}
+function updateTextStyle(){
+  overlay.style.fontFamily = $("fontFamily").value;
+  overlay.style.color = $("textColor").value;
+  overlay.style.fontSize = $("fontSize").value + "px";
+  overlay.style.letterSpacing = $("letterSpacing").value + "px";
+  overlay.style.top = $("textY").value + "%";
+  overlay.style.maxWidth = $("textWidth").value + "%";
+  overlay.style.fontWeight = $("boldToggle").checked ? "900" : "500";
+  overlay.style.textShadow = $("shadowToggle").checked
+    ? "0 3px 18px rgba(0,0,0,.85), 0 1px 2px #000"
+    : "none";
+  overlay.style.webkitTextStroke = $("outlineToggle").checked ? "2px rgba(0,0,0,.9)" : "0";
+  overlay.style.background = $("bgToggle").checked ? "rgba(0,0,0,.45)" : "transparent";
+  $("fontPreview").style.fontFamily = $("fontFamily").value;
+  $("fontPreview").textContent = $("adText").value.trim() || "Vista previa de tipografía";
+}
+syncPair("fontSize","fontSizeNum",()=>updateTextStyle());
+syncPair("letterSpacing","letterSpacingNum",()=>updateTextStyle());
+syncPair("textY","textYNum",()=>updateTextStyle());
+syncPair("textWidth","textWidthNum",()=>updateTextStyle());
+
+["fontFamily","textColor","shadowToggle","outlineToggle","bgToggle","boldToggle","adText"]
+  .forEach(id=>$(id).addEventListener("input",updateTextStyle));
+
+document.querySelectorAll("[data-align]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    overlay.style.textAlign=btn.dataset.align;
+  });
+});
+
+$("applyText").addEventListener("click",()=>{
+  overlay.textContent=$("adText").value.trim();
+  updateTextStyle();
+});
+$("removeText").addEventListener("click",()=>{
+  overlay.textContent="";
+  $("adText").value="";
+  updateTextStyle();
+});
+$("resetTextStyle").addEventListener("click",()=>{
+  $("fontFamily").value="Arial, sans-serif";
+  $("textColor").value="#ffffff";
+  $("fontSize").value=$("fontSizeNum").value=42;
+  $("letterSpacing").value=$("letterSpacingNum").value=0;
+  $("textY").value=$("textYNum").value=10;
+  $("textWidth").value=$("textWidthNum").value=86;
+  $("shadowToggle").checked=true;
+  $("outlineToggle").checked=false;
+  $("bgToggle").checked=false;
+  $("boldToggle").checked=true;
+  overlay.style.textAlign="center";
+  overlay.style.left="50%";
+  overlay.style.transform="translateX(-50%)";
+  updateTextStyle();
+});
+
+let dragging=false, startX=0, startY=0, startLeft=50, startTop=10;
+overlay.addEventListener("pointerdown",e=>{
+  if(!overlay.textContent.trim()) return;
+  dragging=true;
+  overlay.setPointerCapture(e.pointerId);
+  startX=e.clientX; startY=e.clientY;
+  const box=$("preview").getBoundingClientRect();
+  const ob=overlay.getBoundingClientRect();
+  startLeft=((ob.left + ob.width/2 - box.left)/box.width)*100;
+  startTop=((ob.top - box.top)/box.height)*100;
+});
+overlay.addEventListener("pointermove",e=>{
+  if(!dragging) return;
+  const box=$("preview").getBoundingClientRect();
+  const dx=((e.clientX-startX)/box.width)*100;
+  const dy=((e.clientY-startY)/box.height)*100;
+  const left=Math.max(5,Math.min(95,startLeft+dx));
+  const top=Math.max(2,Math.min(88,startTop+dy));
+  overlay.style.left=left+"%";
+  overlay.style.top=top+"%";
+  overlay.style.transform="translateX(-50%)";
+  $("textY").value=$("textYNum").value=Math.round(top);
+});
+overlay.addEventListener("pointerup",()=>dragging=false);
+overlay.addEventListener("pointercancel",()=>dragging=false);
+
+
+async function loadImageForCanvas(src){
+  return new Promise((resolve,reject)=>{
+    const im=new Image();
+    im.onload=()=>resolve(im);
+    im.onerror=reject;
+    im.src=src;
+  });
+}
+$("downloadComposite").addEventListener("click",async()=>{
+  if(!currentImage) return setStatus("Primero genera un resultado.");
+  try{
+    const base=await loadImageForCanvas(currentImage);
+    const canvas=document.createElement("canvas");
+    const fmt={web:[2400,2400],instagram:[1080,1080],instagramStory:[1080,1920],facebook:[1200,1500],tiktok:[1080,1920],pinterest:[1000,1500],print:[4800,6000],custom:[base.naturalWidth||base.width,base.naturalHeight||base.height]}[$("formatSelect")?.value||"web"];
+    canvas.width=fmt[0];
+    canvas.height=fmt[1];
+    const ctx=canvas.getContext("2d");
+    const scale=Math.min(canvas.width/(base.naturalWidth||base.width),canvas.height/(base.naturalHeight||base.height));
+    const drawnW=(base.naturalWidth||base.width)*scale, drawnH=(base.naturalHeight||base.height)*scale;
+    const dx=(canvas.width-drawnW)/2, dy=(canvas.height-drawnH)/2;
+    ctx.fillStyle="#ffffff"; ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(base,dx,dy,drawnW,drawnH);
+
+    ctx.imageSmoothingEnabled=true; ctx.imageSmoothingQuality="high";
+    const resultBox=$("result").getBoundingClientRect();
+    const artBox=$("artOverlay").getBoundingClientRect();
+    const xPct=((artBox.left+artBox.width/2-resultBox.left)/resultBox.width);
+    const yPct=((artBox.top+artBox.height/2-resultBox.top)/resultBox.height);
+    const widthPct=artBox.width/resultBox.width;
+
+    if(referenceImage && artOverlay.style.display!=="none"){
+      const art=await loadImageForCanvas(referenceImage);
+      
+      const rot=Number($("artRotation").value)*Math.PI/180;
+      const drawW=drawnW*widthPct;
+      const drawH=drawW*(art.naturalHeight/art.naturalWidth);
+      const cx=dx+drawnW*xPct;
+      const cy=dy+drawnH*yPct;
+      ctx.save();
+      ctx.translate(cx,cy);
+      ctx.rotate(rot);
+      ctx.drawImage(art,-drawW/2,-drawH/2,drawW,drawH);
+      ctx.restore();
+    }
+
+    if(overlay.textContent.trim()){
+      const fontSizePx=Number($("fontSize").value)*(canvas.width/resultBox.width);
+      const x=(parseFloat(overlay.style.left)||50)/100*canvas.width;
+      const y=(parseFloat(overlay.style.top)||10)/100*canvas.height;
+      ctx.save();
+      ctx.textAlign=overlay.style.textAlign==="left" ? "left" : overlay.style.textAlign==="right" ? "right" : "center";
+      ctx.textBaseline="top";
+      ctx.fillStyle=$("textColor").value;
+      ctx.font=`${$("boldToggle").checked ? "900" : "500"} ${fontSizePx}px ${$("fontFamily").value}`;
+      if($("shadowToggle").checked){
+        ctx.shadowColor="rgba(0,0,0,.85)";
+        ctx.shadowBlur=14*(canvas.width/resultBox.width);
+        ctx.shadowOffsetY=3*(canvas.width/resultBox.width);
+      }
+      if($("outlineToggle").checked){
+        ctx.lineWidth=4*(canvas.width/resultBox.width);
+        ctx.strokeStyle="rgba(0,0,0,.9)";
+        ctx.strokeText(overlay.textContent,x,y);
+      }
+      ctx.fillText(overlay.textContent,x,y);
+      ctx.restore();
+    }
+
+    const a=document.createElement("a");
+    a.download="MASCHA-STUDIO-COMPOSICION.png";
+    a.href=canvas.toDataURL("image/png");
+    a.click();
+    setStatus("Composición descargada.");
+  }catch(e){
+    setStatus("No se pudo preparar la descarga compuesta.");
+  }
+});
+
+updateArtStyle();
+updateTextStyle();
+
+if("serviceWorker" in navigator){ navigator.serviceWorker.register("/sw.js").catch(()=>{}); }
+loadStatus();
+const marketDates={"San Valentín":"Comienza 6 semanas antes.","Graduaciones":"Comienza 8 semanas antes.","Cinco de Mayo":"Comienza 6 semanas antes; público mexicano y latino.","Hispanic Heritage Month":"Comienza 8 semanas antes.","Halloween":"Comienza 8 semanas antes.","Thanksgiving":"Comienza 6 semanas antes.","Navidad":"Comienza 10 semanas antes.","Regreso a clases":"Comienza 8 semanas antes."};function marketSearch(){const q=$("marketQuery").value.trim();const e=encodeURIComponent(q);$("marketLinks").textContent=q?"Etsy: https://www.etsy.com/search?q="+e+" | Imágenes: busca "+q+" en Google Imágenes":"";}$("marketSearch")?.addEventListener("click",marketSearch);$("marketQuery")?.addEventListener("keydown",e=>{if(e.key==="Enter")marketSearch();});$("marketCalendar")?.addEventListener("change",e=>{$("marketNote").textContent=marketDates[e.target.value]||"Elige una fecha para ver cuándo comenzar.";});$("saveMarketIdea")?.addEventListener("click",()=>{const q=$("marketQuery").value.trim();if(q){const a=JSON.parse(localStorage.getItem("mascha_market_ideas")||"[]");if(!a.includes(q))a.push(q);localStorage.setItem("mascha_market_ideas",JSON.stringify(a));$("marketSaved").textContent=a.length+" idea(s) guardada(s)";}});$("makeMockupIdea")?.addEventListener("click",()=>{const q=$("marketQuery").value.trim();if(q){$("prompt").value="Crear mockup de "+q+" para campaña de "+$("marketCalendar").value;window.scrollTo({top:0,behavior:"smooth"});$("marketNote").textContent="Idea preparada arriba en SOLICITUD. Revisa antes de generar.";}});$("makeMockupIdea")?.addEventListener("click",()=>{const q=$("marketQuery").value.trim();if(q){$("prompt").value="Crear mockup de "+q+" para "+$("marketCalendar").value;window.scrollTo({top:0,behavior:"smooth"});$("marketNote").textContent="Idea preparada arriba en SOLICITUD. Revisa antes de generar.";}});const baseDialog=$("baseDialog"),baseFile=$("baseFile");$("openBase")?.addEventListener("click",()=>{if(baseDialog?.showModal)baseDialog.showModal();else $("baseFileDirect")?.click();});$("baseFileDirect")?.addEventListener("change",()=>{const f=$("baseFileDirect").files?.[0];if(!f)return;currentImage=URL.createObjectURL(f);$("result").src=currentImage;$("result").style.display="block";$("empty").style.display="none";setStatus("Fondo/mockup local cargado sin créditos.");});$("useBase")?.addEventListener("click",e=>{const f=baseFile.files?.[0];if(!f)return;e.preventDefault();currentImage=URL.createObjectURL(f);$("result").src=currentImage;$("result").style.display="block";$("empty").style.display="none";$("adPanel").style.display="block";if(referenceImage){artOverlay.src=referenceImage;artOverlay.style.display="block";}setStatus("Fondo base cargado. El arte se puede mover localmente.");baseDialog.close();});const productColor=$("productColor"),productTint=$("productTint"),productLayer=$("productLayer"),productFile=$("productFile");productColor?.addEventListener("input",()=>{if(productLayer?.style.display!=="none"){productLayer.style.filter="sepia(1) saturate(5)";productLayer.style.backgroundColor=productColor.value;}else{productTint.style.background="transparent";productTint.style.opacity=0;}});$("maskFile")?.addEventListener("change",()=>{const f=document.getElementById("maskFile")?.files?.[0];if(!f)return;const u=URL.createObjectURL(f);artOverlay.style.webkitMaskImage="url("+u+")";artOverlay.style.maskImage="url("+u+")";artOverlay.style.webkitMaskSize="100% 100%";artOverlay.style.maskSize="100% 100%";setStatus("Máscara del producto aplicada al diseño.");});$("productFile")?.addEventListener("change",()=>{const f=productFile.files?.[0];if(!f)return;productLayer.src=URL.createObjectURL(f);productLayer.style.display="block";productLayer.classList.add("layer-editable");productLayer.style.pointerEvents="auto";productTint.style.display="none";setStatus("Producto aislado cargado y seleccionado. Ahora puedes moverlo y cambiar su tamaño.");});let dragAll=false,dragPX=0,dragPY=0,dragAX=50,dragAY=50;$("preview")?.addEventListener("pointerdown",e=>{if(false && (e.target===artOverlay||e.target===preview)){dragAll=true;dragPX=e.clientX;dragPY=e.clientY;dragAX=Number($("artX").value);dragAY=Number($("artY").value);preview.setPointerCapture?.(e.pointerId);artOverlay.style.cursor="grabbing";e.preventDefault();}});$("preview")?.addEventListener("pointermove",e=>{if(!dragAll)return;const b=preview.getBoundingClientRect();$("artX").value=$("artXNum").value=Math.max(5,Math.min(95,Math.round(dragAX+(e.clientX-dragPX)/b.width*100)));$("artY").value=$("artYNum").value=Math.max(5,Math.min(95,Math.round(dragAY+(e.clientY-dragPY)/b.height*100)));updateArtStyle();});["pointerup","pointercancel","pointerleave"].forEach(ev=>preview?.addEventListener(ev,()=>{dragAll=false;artOverlay.style.cursor="grab";}));window.addEventListener("pointerup",()=>{dragAll=false;artOverlay.style.cursor="grab";},true);window.addEventListener("pointercancel",()=>{dragAll=false;artOverlay.style.cursor="grab";},true);window.addEventListener("mouseup",()=>{dragAll=false;artOverlay.style.cursor="grab";},true);window.addEventListener("touchend",()=>{dragAll=false;artOverlay.style.cursor="grab";},true);$("layerDesign")?.addEventListener("click",()=>{artOverlay.style.outline="2px solid var(--teal)";setStatus("Capa DISEÑO activa.");});$("layerProduct")?.addEventListener("click",()=>{$("openBase")?.click();});$("layerBackground")?.addEventListener("click",()=>{$("openBase")?.click();});(function(){const q=id=>document.getElementById(id);const result=q("result"),art=q("artOverlay"),tint=q("productTint"),preview=q("preview");function toggle(btn,el,label){if(!btn||!el)return;btn.addEventListener("click",()=>{const on=el.style.display!=="none";el.style.display=on?"none":"";btn.textContent=label+": "+(on?"VISIBLE":"OCULTO");btn.classList.toggle("active",!on);});}toggle(q("toggleBackground"),result,"FONDO");toggle(q("toggleDesign"),art,"DISEÑO");q("backgroundFile")?.addEventListener("change",e=>{const f=e.target.files?.[0];if(!f)return;const u=URL.createObjectURL(f);if(result){result.src=u;result.style.display="block";}if(typeof setStatus==="function")setStatus("Fondo local cargado. Producto y diseño siguen separados.");});let active=false,startX=0,startY=0,baseX=50,baseY=50;function stop(){active=false;try{preview?.releasePointerCapture?.(activePointer)}catch(e){}if(art)art.style.cursor="grab";}let activePointer=null;art?.addEventListener("pointerdown",e=>{active=true;activePointer=e.pointerId;startX=e.clientX;startY=e.clientY;baseX=Number(q("artX")?.value||50);baseY=Number(q("artY")?.value||50);art.setPointerCapture?.(e.pointerId);art.style.cursor="grabbing";e.preventDefault();e.stopPropagation();});art?.addEventListener("pointermove",e=>{if(!active)return;const b=preview.getBoundingClientRect();const nx=Math.max(0,Math.min(100,Math.round(baseX+(e.clientX-startX)/b.width*100)));const ny=Math.max(0,Math.min(100,Math.round(baseY+(e.clientY-startY)/b.height*100)));if(q("artX")){q("artX").value=nx;q("artXNum").value=nx;}if(q("artY")){q("artY").value=ny;q("artYNum").value=ny;}if(typeof updateArtStyle==="function")updateArtStyle();e.preventDefault();});["pointerup","pointercancel","lostpointercapture"].forEach(ev=>art?.addEventListener(ev,stop));window.addEventListener("pointerup",stop,true);window.addEventListener("pointercancel",stop,true);window.addEventListener("blur",stop);window.addEventListener("keydown",e=>{if(e.key==="Escape")stop();});})();document.getElementById("mockupModule")?.classList.add("active");const areaMap={designArea:"layerDesign",productArea:"layerProduct",backgroundArea:"layerBackground"};Object.entries(areaMap).forEach(([a,b])=>document.getElementById(a)?.addEventListener("click",()=>document.getElementById(b)?.click()));document.getElementById("fusionArea")?.addEventListener("click",()=>document.getElementById("downloadComposite")?.scrollIntoView({behavior:"smooth",block:"center"}));</script>
+<dialog id="baseDialog"><form method="dialog"><h2>Fondo / mockup base</h2><p class="muted">Sube una camiseta, mug, cuaderno u otra imagen limpia. El diseño se aplicará encima y seguirá editable.</p><input id="baseFile" type="file" accept="image/*"><div class="btnrow"><button class="primary" id="useBase" value="default">USAR ESTA IMAGEN</button><button class="secondary" value="cancel">CANCELAR</button></div></form></dialog><style id="visibility-dock-fix">.preview>.headerLayers{position:absolute!important;right:10px;bottom:10px;top:auto!important;left:auto!important;z-index:60;display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end;padding:6px;background:rgba(2,8,12,.82);border:1px solid #235761;border-radius:10px;backdrop-filter:blur(8px);max-width:calc(100% - 20px)}.preview>.headerLayers>span{display:none}.preview>.headerLayers button{font-size:10px;padding:7px 8px}.preview>.headerLayers button.active{background:var(--teal);color:#03201d}@media(max-width:700px){.preview>.headerLayers{right:6px;bottom:6px;max-width:calc(100% - 12px)}.preview>.headerLayers button{font-size:9px;padding:6px 5px}}
+</style><script id="visibility-dock-fix-script">(()=>{const q=id=>document.getElementById(id);function init(){const p=q("preview"),h=document.querySelector(".headerLayers");if(p&&h&&!p.contains(h))p.appendChild(h);const b=q("toggleProduct"),prod=q("productLayer");b?.addEventListener("click",()=>{if(!prod||prod.style.display==="none"){q("editProduct")?.click();if(typeof window.setStatus==="function")window.setStatus("Carga primero una imagen en PRODUCTO para activar esta capa.");return}const on=prod.style.display!=="none";prod.style.display=on?"none":"block";b.textContent="PRODUCTO: "+(on?"OCULTO":"VISIBLE");b.classList.toggle("active",!on)})}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else setTimeout(init,0)})();</script><style id="control-dock-right">.preview>#artPanel{position:absolute;right:10px;top:10px;width:280px;max-width:calc(100% - 20px);z-index:55;margin:0;padding:10px;background:rgba(8,13,18,.92);border:1px solid #235761;border-radius:12px;backdrop-filter:blur(10px);box-shadow:0 10px 28px rgba(0,0,0,.45)}.preview>#artPanel .editorGrid{display:grid!important;grid-template-columns:1fr!important;gap:6px}.preview>#artPanel .label{font-size:10px}.preview>#artPanel .muted,.preview>#artPanel .small{font-size:9px}.preview>#artPanel .btnrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px}.preview>#artPanel .btnrow button{font-size:9px;padding:7px 3px}.preview>#artPanel input[type=range]{width:100%}@media(max-width:700px){.preview>#artPanel{right:6px;top:6px;width:225px;padding:7px}.preview>#artPanel .btnrow{grid-template-columns:1fr}.preview>#artPanel .btnrow button{font-size:8px;padding:6px}}
+</style><script id="control-dock-right-script">(()=>{function move(){const p=document.getElementById("preview"),a=document.getElementById("artPanel");if(p&&a&&!p.contains(a))p.appendChild(a)}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",move);else setTimeout(move,0)})();</script><style id="outside-controls-fix">.layout{overflow:visible!important}.card{overflow:visible!important}.card:has(#preview){position:relative}.card>#artPanel.controlOutside{position:absolute;left:calc(100% + 12px);top:190px;width:280px;max-width:280px;margin:0;padding:12px;background:rgba(8,13,18,.96);border:1px solid #235761;border-radius:12px;z-index:70;box-shadow:0 10px 28px rgba(0,0,0,.5)}.card>#artPanel.controlOutside .editorGrid{display:grid!important;grid-template-columns:1fr!important;gap:6px}.card>#artPanel.controlOutside .btnrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px}.card>#artPanel.controlOutside .btnrow button{font-size:9px;padding:7px 3px}@media(max-width:1250px) and (min-width:701px){.card>#artPanel.controlOutside{left:auto;right:10px;top:190px;transform:translateX(100%)}}@media(max-width:700px){.card>#artPanel.controlOutside{position:relative;left:auto;right:auto;top:auto;transform:none;width:100%;max-width:none;margin:12px 0 0}.card>#artPanel.controlOutside .btnrow{grid-template-columns:1fr 1fr 1fr}}
+</style><script id="outside-controls-fix-script">(()=>{function moveOut(){const p=document.getElementById("preview"),a=document.getElementById("artPanel"),c=p?.closest(".card");if(a&&c){c.appendChild(a);a.classList.add("controlOutside")}}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",moveOut);else setTimeout(moveOut,30)})();</script><script id="central-layer-manager">(()=>{const q=id=>document.getElementById(id),p=q("preview"),art=q("artOverlay"),prod=q("productLayer"),bg=q("result"),empty=q("empty");const S={active:"design",layers:{design:{x:50,y:50,size:34,rot:0,visible:true,src:""},product:{x:50,y:50,size:100,rot:0,visible:true,src:""},background:{x:50,y:50,size:100,rot:0,visible:true,src:""}},undo:[],redo:[],last:""};const ids={design:{el:art,x:"artX",y:"artY",size:"artSize",rot:"artRotation"},product:{el:prod},background:{el:bg}};function snap(){return JSON.parse(JSON.stringify(S.layers))}function status(t){q("status")&&(q("status").textContent=t);q("editLayerStatus")&&(q("editLayerStatus").textContent="Capa activa: "+S.active.toUpperCase())}function save(){let k=JSON.stringify(S.layers);if(S.last&&k!==S.last){S.undo.push(JSON.parse(S.last));if(S.undo.length>50)S.undo.shift();S.redo=[]}S.last=k;renderHistory()}function renderHistory(){q("undoAction")?.toggleAttribute("disabled",!S.undo.length);q("redoAction")?.toggleAttribute("disabled",!S.redo.length)}function apply(l){let s=S.layers[l],e=ids[l].el;if(!e)return;e.style.display=s.visible?"block":"none";if(l==="background"){e.style.position="absolute";e.style.inset="0";e.style.width="100%";e.style.height="100%";e.style.objectFit="cover";return}e.style.position="absolute";e.style.left=s.x+"%";e.style.top=s.y+"%";e.style.width=s.size+"%";e.style.height="auto";e.style.maxWidth="none";e.style.maxHeight="none";e.style.transform="translate(-50%,-50%) rotate("+s.rot+"deg)";e.style.pointerEvents="auto";e.style.cursor="grab"}function render(){Object.keys(ids).forEach(apply);let l=ids[S.active],s=S.layers[S.active];if(l.x){q(l.x).value=s.x;q(l.y).value=s.y;q(l.size).value=s.size;q(l.rot).value=s.rot}document.querySelectorAll("#layerEditBar button").forEach(b=>b.classList.toggle("active",b.id==="edit"+S.active[0].toUpperCase()+S.active.slice(1)));status("Capa activa: "+S.active.toUpperCase());renderHistory()}function select(l){S.active=l;render()}function load(l,f){if(!f)return;let u=URL.createObjectURL(f),s=S.layers[l];s.src=u;s.visible=true;ids[l].el.src=u;select(l);save();render();status("Imagen cargada en capa "+l.toUpperCase()+". Ahora puedes moverla y cambiar su tamaño.")}function setVal(k,v){let s=S.layers[S.active];if(k==="x"||k==="y"||k==="size"||k==="rot")s[k]=Number(v);render()}function restore(v){S.layers=JSON.parse(JSON.stringify(v));render();S.last=JSON.stringify(S.layers)}function click(e){let id=e.target?.id;if(id==="editDesign")select("design");else if(id==="editProduct")select("product");else if(id==="editBackground")select("background");else if(id==="toggleDesign"){S.layers.design.visible=!S.layers.design.visible;save();render()}else if(id==="toggleProduct"){S.layers.product.visible=!S.layers.product.visible;save();render()}else if(id==="toggleBackground"){S.layers.background.visible=!S.layers.background.visible;save();render()}else if(id==="centerArt"){S.layers[S.active].x=50;S.layers[S.active].y=50;save();render()}else if(id==="resetArt"){S.layers[S.active]={...S.layers[S.active],x:50,y:50,size:S.active==="design"?34:100,rot:0};save();render()}else if(id==="newComposition"){save();Object.keys(S.layers).forEach(l=>{S.layers[l]={x:50,y:50,size:l==="design"?34:100,rot:0,visible:false,src:""};ids[l].el.removeAttribute("src")});empty&&(empty.style.display="block");S.undo=[];S.redo=[];S.last=JSON.stringify(S.layers);render();status("Nueva composición preparada.")}else if(id==="undoAction"){if(!S.undo.length){status("No hay cambios para retroceder.");return}S.redo.push(snap());restore(S.undo.pop());status("Cambio anterior restaurado.")}else if(id==="redoAction"){if(!S.redo.length){status("No hay cambios para adelantar.");return}S.undo.push(snap());restore(S.redo.pop());status("Cambio adelantado restaurado.")}}document.addEventListener("click",e=>{if(["editDesign","editProduct","editBackground","toggleDesign","toggleProduct","toggleBackground","centerArt","resetArt","newComposition","undoAction","redoAction"].includes(e.target?.id)){e.stopImmediatePropagation();click(e)}},true);document.addEventListener("input",e=>{let m={artX:"x",artY:"y",artSize:"size",artRotation:"rot"}[e.target?.id];if(m){e.stopImmediatePropagation();setVal(m,e.target.value)}},true);document.addEventListener("change",e=>{let id=e.target?.id,f=e.target?.files?.[0];if(f&&({file:"design",productFile:"product",baseFile:"background",baseFileDirect:"background"}[id])){e.stopImmediatePropagation();load(({file:"design",productFile:"product",baseFile:"background",baseFileDirect:"background"}[id]),f)}},true);let drag=null;p?.addEventListener("pointerdown",e=>{let l=e.target===art?"design":e.target===prod?"product":e.target===bg?"background":null;if(!l||!S.layers[l].visible)return;select(l);drag={l,x:e.clientX,y:e.clientY,bx:S.layers[l].x,by:S.layers[l].y};p.setPointerCapture?.(e.pointerId);e.stopImmediatePropagation();e.preventDefault()},true);p?.addEventListener("pointermove",e=>{if(!drag)return;let b=p.getBoundingClientRect(),s=S.layers[drag.l];s.x=Math.max(0,Math.min(100,drag.bx+(e.clientX-drag.x)/b.width*100));s.y=Math.max(0,Math.min(100,drag.by+(e.clientY-drag.y)/b.height*100));render();e.stopImmediatePropagation();e.preventDefault()},true);["pointerup","pointercancel","lostpointercapture"].forEach(ev=>p?.addEventListener(ev,()=>{if(drag){drag=null;save()}},true));q("productColor")?.addEventListener("input",e=>{if(S.active!=="product")select("product");if(prod){prod.style.backgroundColor=e.target.value;prod.style.mixBlendMode="multiply"}save()},true);S.last=JSON.stringify(S.layers);window.__MASCHA_LAYER_MANAGER__=S;render()})();</script></body>
+</html>
